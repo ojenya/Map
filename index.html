@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Map</title>
+    <script src="https://www.amcharts.com/lib/3/ammap.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <!-- <script>
+        $(document).ready(function() {
+            $("div").mousemove(function() {
+                area = document.createElement("div").className("modal1");
+                $("div").append("w");
+            });
+        });
+    </script> -->
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        #chartdiv {
+            width: 100%;
+            height: 800px;
+        }
+        
+        .disabled {
+            pointer-events: none;
+        }
+        
+        .amcharts-balloon-bg {
+            stroke: #ffffff;
+            /* stroke-dasharray: 5, 5; */
+            fill: #ffffff;
+        }
+        
+        .tooltip {
+            position: absolute;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="chartdiv">
+    </div>
+    <!-- <object data="/svg/Vector.svg" type="image/svg+xml" class="tooltip"></object> -->
+
+    <!-- <div class="modal">
+        <svg id="tooltip" width="249" height="61" viewBox="0 0 249 61" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g filter="url(#filter0_d)">
+                <path
+                    d="M4 5C4 2.23858 6.23858 0 9 0H240C242.761 0 245 2.23858 245 5V30C245 32.7614 242.761 35 240 35H9C6.23858 35 4 32.7614 4 30V5Z"
+                    fill="white" />
+                <path d="M20.4771 52.4979L15.703 30.3065L28.6535 31.3225L20.4771 52.4979Z" fill="white" />
+            </g>
+            <defs>
+                <filter id="filter0_d" x="0" y="0" width="249" height="60.4979" filterUnits="userSpaceOnUse"
+                    color-interpolation-filters="sRGB">
+                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+                    <feOffset dy="4" />
+                    <feGaussianBlur stdDeviation="2" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape" />
+                </filter>
+
+            </defs>
+            <style>
+                .small {
+                    font: italic 16px sans-serif;
+                    fill: blue;
+                    text-align:center
+                }
+            </style>
+            <text x="15" y="25"  class="small"></text>
+        </svg>
+
+    </div> -->
+
+
+    <!-- <script>
+        document.onload = function() {
+            let map = document.getElementsByClassName("amcharts-chart-div");
+            console.log("ASSSSSSSSS=====");
+            console.log(map);
+
+        };
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var X = Y = 0;
+            document.addEventListener("mousemove", function(e) {
+                X = e.clientX;
+                Y = e.clientY;
+                document.getElementsByClassName('tooltip')[0].style.left = X - 20 + 'px';
+                document.getElementsByClassName('tooltip')[0].style.top = Y + 205 + 'px';
+                // document.getElementById('tooltip').style.left = X - 20 + 'px';
+                // document.getElementsById('tooltip').style.top = Y - 60 + 'px';
+                // console.log(document.getElementById('tooltip'));
+            }, false);
+
+
+        });
+    </script> -->
+    <script>
+        const regions = ['RU-AD', 'RU-ARK', 'RU-AST', 'RU-BA', 'RU-BEL', 'RU-BRY', 'RU-CE', 'RU-CHE', 'RU-CU', 'RU-DA',
+            'RU-IN',
+            'RU-IVA', 'RU-KB', 'RU-KC', 'RU-KDA', 'RU-KLU', 'RU-KR', 'RU-KL', 'RU-KHM', 'RU-KGD', 'RU-KO', 'RU-KRS',
+            'RU-KOS', 'RU-KGN', 'RU-KIR',
+            'RU-LEN', 'RU-LIP', 'RU-MOW', 'RU-ME', 'RU-MUR', 'RU-MO', 'RU-MOS', 'RU-NGR', 'RU-NEN', 'RU-SE',
+            'RU-NIZ', 'RU-ORE', 'RU-ORL', 'RU-OMS',
+            'RU-PER', 'RU-PSK', 'RU-PNZ', 'RU-ROS', 'RU-RYA', 'RU-SAM', 'RU-SMO', 'RU-SPE', 'RU-SAR', 'RU-STA',
+            'RU-SVE', 'RU-TAM', 'RU-TOM',
+            'RU-TUL', 'RU-TA', 'RU-TVE', 'RU-TYU', 'RU-UD', 'RU-ULY', 'RU-VGG', 'RU-VLA', 'RU-VLG', 'RU-VOR',
+            'RU-YAR', 'RU-YAN', 'RU-NVS'
+        ]
+
+        const enableAreas = regions.map((area) => {
+            return {
+                id: area,
+                color: '#CCCCCC'
+            }
+        })
+
+        // ссылка на codepen https://www.amcharts.com/demos-v3/location-sensitive-map-v3/
+
+        let map = AmCharts.makeChart('chartdiv', {
+            'type': 'map',
+            'theme': 'light',
+            "addClassNames": true,
+            'zoomOnDoubleClick': false,
+
+            'dataProvider': {
+                'mapURL': 'https://www.amcharts.com/lib/3/maps/svg/russiaHigh.svg',
+                'getAreasFromMap': true,
+                // 'zoomLevel': 0.9,
+                'areas': [...enableAreas],
+                'zoomLevel': 1,
+            },
+            'areasSettings': {
+                'color': '#2E56F6',
+                'autoZoom': false,
+                'rollOverOutlineColor': '#FFFFFF',
+                'rollOverColor': '#0A143D',
+                'selectedColor': '#0A143D',
+                'alpha': 1,
+                'unlistedAreasAlpha': 0,
+
+
+            },
+            "balloon": {
+                "adjustBorderColor": true,
+                "color": "#2E56F6",
+                "borderColor": "#FFFFFF",
+                "cornerRadius": 6,
+                "fillColor": "#FFFFFF",
+            },
+
+            'balloonLabelFunction': (mapObject, ammap) => {
+                // console.log(mapObject.title)
+                // var modal = document.querySelector(".modal")
+                // var city = modal.children[0].children[3];
+                var regions = new Map();
+                regions.set("Krasnoyarsk", "Красноярский край");
+                regions.set("Kemerovo", "Кемеровская область");
+                regions.set("Altay", "Алтайский край");
+                regions.set("Gorno-Altay", "Горно-Алтайск");
+                regions.set("Khakass", "Республика Хакассия");
+                regions.set("Tuva", "Республика Тыва");
+                regions.set("Irkutsk", "Иркутская область");
+                regions.set("Buryat", "Республика Бурятия");
+                regions.set("Zabaykal'ye", "Забайкальский край");
+                regions.set("Amur", "Амурская область");
+                regions.set("Sakha", "Республика Саха");
+                regions.set("Khabarovsk", "Хабаровская область");
+                regions.set("Sakhalin", "о. Сахалин");
+                regions.set("Primor'ye", "Приморский край");
+                regions.set("Kamchatka", "Каматский край");
+                regions.set("Chukot", "Чукотский АО");
+                regions.set("Magadan", "Магаданская облатсь");
+                regions.set("Yevrey", "Еврейская АО");
+                for (var [key, value] of regions) {
+                    if (key === mapObject.title) {
+                        console.log(value);
+                        return value;
+                        // modal.children[0].children[3].prepend(value);
+                    }
+                }
+            },
+
+            // console.log(city)
+            // document.onmousemove = function() {
+            //     document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeEnd',
+            //         '<div class="modal"> <svg width="249" height="61" viewBox="0 0 249 61" fill="none" xmlns="http://www.w3.org/2000/svg"> <g filter="url(#filter0_d)"><path d="M4 5C4 2.23858 6.23858 0 9 0H240C242.761 0 245 2.23858 245 5V30C245 32.7614 242.761 35 240 35H9C6.23858 35 4 32.7614 4 30V5Z"  fill="white" /> <path d="M20.4771 52.4979L15.703 30.3065L28.6535 31.3225L20.4771 52.4979Z" fill="white" /> </g> <defs> <filter id="filter0_d" x="0" y="0" width="249" height="60.4979" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix" /> <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" /><feOffset dy="4" /><feGaussianBlur stdDeviation="2" /> <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" /> <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" /><feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape" /></filter></defs> <style>.small {font: italic 13px sans-serif;fill: blue;}</style> <text x="15" y="25" class="small"></text> </svg></div>',
+
+
+            //     );
+            //     // var modal = document.getElementsByClassName('modal');
+            //     // modal.style.position = 'fixed';
+
+            //     // document.onmousemove = function(event) {
+            //     //     modal.style.left = event.clientX - 50 + 'px';
+            //     //     modal.style.top = event.clientY - 50 + 'px';
+            //     // }
+            // }
+
+
+
+            // },
+            'zoomControl': {
+                // 'minZoomLevel': 0.9,
+                'panControlEnabled': false,
+                'zoomControlEnabled': false,
+                'homeButtonEnabled': false
+            },
+
+            'listeners': [{
+                    'event': 'init',
+                    'method': updateHeatmap
+
+                }, {
+                    "event": "rendered",
+                    "method": function(event) {
+                        var chart = event.chart;
+                        // console.log(chart)
+                    }
+                }
+
+            ]
+
+
+        });
+
+        // map.addListener("rendered", function() {
+        //     jQuery('.amcharts-chart-div').tooltip({
+        //         items: "*",
+        //         content: "Zoom the map"
+        //     });
+        // });
+
+        function updateHeatmap(event) {
+
+            let source = document.querySelector('[href="http://www.amcharts.com/javascript-maps/"]')
+
+            hide(source)
+
+            let areas = event.chart.svgAreasById
+
+            for (let key in areas) {
+                if (regions.includes(key)) {
+                    areas[key].area.node.classList.add('disabled')
+                }
+            }
+
+        }
+
+        //heh
+        function hide(element) {
+            element.style.display = 'none'
+
+
+        }
+    </script>
+
+
+    <!-- <span class="bottom" rel="tooltip" title="tooltip content">Tooltip</span>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+
+    <script src="js/index.js"></script> -->
+
+</body>
+
+</html>
